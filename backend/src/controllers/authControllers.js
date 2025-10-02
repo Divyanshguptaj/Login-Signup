@@ -22,12 +22,18 @@ export const signup = async (req, res, next) => {
     // Hash password
     // Let model pre-save hook hash the password
 
+    // Generate a random avatar
+    // Generate a random avatar using the user's email as a seed for a unique design
+    // Generate a random avatar using the 'adventurer' style
+    const avatar = `https://api.dicebear.com/6.x/adventurer/svg?seed=${email}`;
+
     // Create user
     const user = await User.create({
       name,
       email,
       password,
       role: role || "user",
+      avatar,
     });
 
     // Generate JWT
@@ -45,6 +51,7 @@ export const signup = async (req, res, next) => {
         name: user.name,
         email: user.email,
         role: user.role,
+        avatar: user.avatar,
       },
     });
   } catch (error) {
@@ -81,14 +88,18 @@ export const login = async (req, res, next) => {
       { expiresIn: "1d" }
     );
 
+    // Manually refetch user to include avatar (since it's not selected by default)
+    const userWithAvatar = await User.findById(user._id);
+
     return res.status(200).json({
       message: "Login successful",
       token,
       user: {
-        id: user._id,
-        name: user.name,
-        email: user.email,
-        role: user.role,
+        id: userWithAvatar._id,
+        name: userWithAvatar.name,
+        email: userWithAvatar.email,
+        role: userWithAvatar.role,
+        avatar: userWithAvatar.avatar,
       },
     });
   } catch (error) {

@@ -43,9 +43,15 @@ const Navbar = () => {
                 onClick={() => setOpen(!open)}
                 className="flex items-center gap-2 rounded-full border bg-white dark:bg-slate-800 dark:border-slate-700 px-2 py-1.5 shadow-sm hover:bg-slate-50 dark:hover:bg-slate-700"
               >
-                <div className="h-8 w-8 rounded-full bg-gradient-to-br from-blue-500 to-indigo-500 text-white grid place-items-center">
-                  {(user.name || "U").slice(0,1).toUpperCase()}
-                </div>
+                {
+                  user.avatar ? (
+                    <img src={user.avatar} alt={user.name} className="h-8 w-8 rounded-full object-cover" />
+                  ) : (
+                    <div className="h-8 w-8 rounded-full bg-gradient-to-br from-blue-500 to-indigo-500 text-white grid place-items-center">
+                      {(user.name || "U").slice(0,1).toUpperCase()}
+                    </div>
+                  )
+                }
                 <span className="hidden sm:block text-sm font-medium">{user.name || user.username}</span>
               </button>
               {open && (

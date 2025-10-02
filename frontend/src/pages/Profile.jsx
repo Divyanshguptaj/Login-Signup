@@ -15,8 +15,12 @@ const Profile = () => {
       const data = await getProfile();
       const name = data?.name || "User";
       setFormData({ name, email: data?.email || "" });
-      const svgUrl = createInitialsAvatar(name);
-      setAvatarPreview(svgUrl);
+      if (data?.avatar) {
+        setAvatarPreview(data.avatar);
+      } else {
+        const svgUrl = createInitialsAvatar(name);
+        setAvatarPreview(svgUrl);
+      }
     };
     fetchProfile();
   }, []);

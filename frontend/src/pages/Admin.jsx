@@ -32,8 +32,12 @@ const Admin = () => {
     }
   };
 
-  const UserAvatar = ({ name }) => {
-    const initial = name ? name.charAt(0).toUpperCase() : '?';
+  const UserAvatar = ({ user }) => {
+    if (user.avatar) {
+      return <img src={user.avatar} alt={user.name} className="w-10 h-10 rounded-full object-cover" />;
+    }
+
+    const initial = user.name ? user.name.charAt(0).toUpperCase() : '?';
     return (
       <div className="w-10 h-10 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white font-bold text-lg">
         {initial}
@@ -101,7 +105,7 @@ const Admin = () => {
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center">
                         <div className="flex-shrink-0 h-10 w-10">
-                          <UserAvatar name={user.name} />
+                          <UserAvatar user={user} />
                         </div>
                         <div className="ml-4">
                           <div className="text-sm font-medium text-gray-900 dark:text-white">{user.name}</div>

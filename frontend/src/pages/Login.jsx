@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import Input from "../components/Input";
-import Button from "../components/Button";
+import { AlertTriangle, Loader } from 'lucide-react';
 import { useAuth } from "../context/AuthContext";
+import AuthLayout from "../layout/AuthLayout";
 
 const Login = () => {
   const { login } = useAuth();
@@ -31,80 +31,82 @@ const Login = () => {
     }
   };
 
+  const highlights = [
+    "Secure authentication with JWT",
+    "Clean, responsive UI",
+    "Fast task management experience",
+  ];
+
+  const form = (
+    <form
+      className="w-full max-w-md bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-100 dark:border-gray-700 p-8"
+      onSubmit={handleSubmit}
+    >
+      <div className="mb-8 text-center">
+        <h2 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white">Sign In</h2>
+        <p className="text-gray-600 dark:text-gray-400 mt-2">Please enter your credentials to continue.</p>
+      </div>
+
+      {error && (
+        <div className="mb-6 p-4 rounded-xl border bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800 text-red-800 dark:text-red-200 flex items-center gap-3">
+          <AlertTriangle className="w-5 h-5" />
+          <p className="font-medium text-sm">{error}</p>
+        </div>
+      )}
+
+      <div className="space-y-6">
+        <div>
+          <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Email Address</label>
+          <input
+            type="email"
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
+            required
+            className="w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+            placeholder="you@example.com"
+          />
+        </div>
+        <div>
+          <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Password</label>
+          <input
+            type="password"
+            name="password"
+            value={formData.password}
+            onChange={handleChange}
+            required
+            className="w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+            placeholder="••••••••"
+          />
+        </div>
+      </div>
+
+      <button
+        type="submit"
+        disabled={loading}
+        className="mt-8 w-full px-8 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-blue-300 flex items-center justify-center gap-2"
+      >
+        {loading && <Loader className="w-5 h-5 animate-spin" />}
+        {loading ? "Signing in..." : "Sign In"}
+      </button>
+
+      <p className="mt-8 text-center text-sm text-gray-600 dark:text-gray-400">
+        Don’t have an account?{" "}
+        <Link to="/signup" className="font-semibold text-blue-600 hover:text-blue-500 dark:text-blue-400 dark:hover:text-blue-300">
+          Sign up
+        </Link>
+      </p>
+    </form>
+  );
+
   return (
-    <div className="min-h-screen grid grid-cols-1 md:grid-cols-2 bg-gradient-to-br from-slate-50 to-slate-100">
-      <div className="hidden md:flex flex-col justify-between p-10 relative overflow-hidden">
-        <div className="absolute -top-24 -left-24 h-96 w-96 rounded-full bg-gradient-to-br from-blue-500/20 to-indigo-500/20 blur-3xl" />
-        <div className="absolute -bottom-24 -right-24 h-96 w-96 rounded-full bg-gradient-to-tr from-cyan-400/20 to-purple-500/20 blur-3xl" />
-        <div className="relative z-10">
-          <div className="flex items-center gap-3">
-            <div className="h-10 w-10 rounded-xl bg-white shadow-sm grid place-items-center text-blue-600 text-xl">🔐</div>
-            <h1 className="text-2xl font-bold text-slate-800">Welcome Back</h1>
-          </div>
-          <p className="mt-4 text-slate-600 max-w-md">
-            Login to access your dashboard and manage tasks seamlessly.
-          </p>
-        </div>
-        <div className="relative z-10 mt-10">
-          <div className="rounded-2xl border bg-white/60 backdrop-blur p-6 shadow-sm">
-            <h3 className="text-lg font-semibold text-slate-800 mb-2">Highlights</h3>
-            <ul className="space-y-2 text-slate-600 text-sm list-disc list-inside">
-              <li>Secure authentication with JWT</li>
-              <li>Clean, responsive UI</li>
-              <li>Fast task management experience</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-
-      <div className="flex items-center justify-center p-6 md:p-10">
-        <form
-          className="w-full max-w-md bg-white rounded-2xl shadow-lg border p-6 md:p-8"
-          onSubmit={handleSubmit}
-        >
-          <div className="mb-6 text-center">
-            <h2 className="text-3xl font-bold tracking-tight text-slate-800">Sign in</h2>
-            <p className="text-slate-500 mt-1">Please enter your credentials</p>
-          </div>
-
-          {error && (
-            <div className="mb-4 rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">
-              {error}
-            </div>
-          )}
-
-          <div className="space-y-4">
-            <Input
-              label="Email"
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              required
-            />
-            <Input
-              label="Password"
-              type="password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              required
-            />
-          </div>
-
-          <Button type="submit" disabled={loading} className="mt-6 w-full">
-            {loading ? "Logging in..." : "Login"}
-          </Button>
-
-          <p className="mt-6 text-center text-sm text-slate-600">
-            Don’t have an account?{" "}
-            <Link to="/signup" className="font-medium text-blue-600 hover:text-blue-700">
-              Sign up
-            </Link>
-          </p>
-        </form>
-      </div>
-    </div>
+    <AuthLayout 
+      title="Welcome Back"
+      subtitle="Login to access your dashboard and manage tasks seamlessly."
+      highlights={highlights}
+      form={form}
+      image="🔐"
+    />
   );
 };
 
