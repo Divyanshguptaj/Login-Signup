@@ -45,7 +45,7 @@ export const getUserById = async (req, res, next) => {
 // @access  Private
 export const updateUserProfile = async (req, res, next) => {
   try {
-    const { username, email, password } = req.body;
+    const { name, email, password } = req.body;
 
     const user = await User.findById(req.user.id);
 
@@ -53,13 +53,11 @@ export const updateUserProfile = async (req, res, next) => {
       return res.status(404).json({ message: "User not found" });
     }
 
-    if (username) user.username = username;
+    if (name) user.name = name;
     if (email) user.email = email;
 
-    if (password) {
-      const salt = await bcrypt.genSalt(10);
-      user.password = await bcrypt.hash(password, salt);
-    }
+    // Let model pre-save hook hash the password
+    if (password) user.password = password;
 
     const updatedUser = await user.save();
 
@@ -67,7 +65,7 @@ export const updateUserProfile = async (req, res, next) => {
       message: "Profile updated successfully",
       user: {
         id: updatedUser._id,
-        username: updatedUser.username,
+        name: updatedUser.name,
         email: updatedUser.email,
         role: updatedUser.role,
       },

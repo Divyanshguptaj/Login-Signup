@@ -1,6 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { useTheme } from "../context/ThemeContext";
+import { Sun, Moon } from 'lucide-react';
+import useOutsideClick from "../hooks/useOutsideClick";
 
 const Navbar = () => {
   const { user, logout } = useAuth();
@@ -12,31 +15,12 @@ const Navbar = () => {
   };
 
   const [open, setOpen] = useState(false);
-  const [isDark, setIsDark] = useState(false);
-
-  useEffect(() => {
-    const stored = localStorage.getItem("theme");
-    if (stored) {
-      const dark = stored === "dark";
-      setIsDark(dark);
-      document.documentElement.classList.toggle("dark", dark);
-    } else {
-      // default: respect system
-      const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-      setIsDark(prefersDark);
-      document.documentElement.classList.toggle("dark", prefersDark);
-    }
-  }, []);
-
-  const toggleTheme = () => {
-    const next = !isDark;
-    setIsDark(next);
-    document.documentElement.classList.toggle("dark", next);
-    localStorage.setItem("theme", next ? "dark" : "light");
-  };
+  const dropdownRef = useRef(null);
+  useOutsideClick(dropdownRef, () => setOpen(false));
+  const { isDark, toggleTheme } = useTheme();
 
   return (
-    <nav className="sticky top-0 z-40 bg-white/80 dark:bg-slate-900/80 backdrop-blur border-b dark:border-slate-800">
+    <nav className="sticky top-0 z-40 bg-white/80 dark:bg-slate-900/80 backdrop-blur border-b dark:border-slate-600">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex justify-between items-center">
         <div className="flex items-center gap-2">
           <div className="h-9 w-9 rounded-lg bg-blue-600 text-white grid place-items-center text-lg">🔒</div>
@@ -49,12 +33,12 @@ const Navbar = () => {
           <button
             onClick={toggleTheme}
             aria-label="Toggle theme"
-            className="rounded-md border px-2.5 py-1.5 bg-white/70 dark:bg-slate-800 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700 transition"
+            className="p-2 rounded-full text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
           >
-            {isDark ? "🌞 Light" : "🌙 Dark"}
+            {isDark ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
           </button>
           {user ? (
-            <div className="relative">
+            <div className="relative" ref={dropdownRef}>
               <button
                 onClick={() => setOpen(!open)}
                 className="flex items-center gap-2 rounded-full border bg-white dark:bg-slate-800 dark:border-slate-700 px-2 py-1.5 shadow-sm hover:bg-slate-50 dark:hover:bg-slate-700"

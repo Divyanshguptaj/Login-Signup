@@ -13,14 +13,14 @@ const DashboardLayout = () => {
   };
 
   return (
-    <div className="flex flex-col min-h-screen bg-slate-50 dark:bg-slate-900">
+    <div className="flex flex-col min-h-screen bg-slate-50 dark:bg-slate-800">
       {/* Navbar */}
       <Navbar />
 
       <div className="flex flex-1">
         {/* Sidebar */}
-        <aside className="w-64 bg-white/70 dark:bg-slate-900/50 backdrop-blur border-r dark:border-slate-800 hidden md:flex flex-col p-4">
-          <h2 className="text-lg font-semibold mb-4">Dashboard</h2>
+        <aside className="w-64 bg-white/70 dark:bg-slate-900 backdrop-blur hidden md:flex flex-col p-4 border-r border-slate-200 dark:border-slate-700">
+          <h2 className="text-lg font-semibold mb-4 text-slate-900 dark:text-slate-100">Dashboard</h2>
           <nav className="flex flex-col space-y-2">
             <Link to="/dashboard" className="hover:bg-gray-100 dark:hover:bg-slate-800 p-2 rounded">
               Home

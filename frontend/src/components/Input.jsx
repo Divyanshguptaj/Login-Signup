@@ -20,7 +20,7 @@ const Input = ({
         value={value}
         onChange={onChange}
         required={required}
-        className="px-3 py-2 border border-gray-300 rounded-md bg-white text-slate-900 placeholder-slate-400 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+        className="bg-white border border-gray-300 dark:border-slate-400 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 text-slate-900 dark:text-slate-100 dark:placeholder-slate-600"
       />
     </div>
   );
