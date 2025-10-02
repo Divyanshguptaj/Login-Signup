@@ -5,18 +5,19 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-d
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Dashboard from "./pages/Dashboard";
+import Profile from "./pages/Profile";
+import Tasks from "./pages/Tasks";
+import DashboardLayout from "./layout/DashboardLayout";
+import Admin from "./pages/Admin";
 
 // Context / Auth
 import { AuthProvider, useAuth } from "./context/AuthContext";
 
 // Protected Route Component
 const ProtectedRoute = ({ children }) => {
-  const { user } = useAuth();
-
-  if (!user) {
-    return <Navigate to="/login" replace />;
-  }
-
+  const { user, loading } = useAuth();
+  if (loading) return null;
+  if (!user) return <Navigate to="/login" replace />;
   return children;
 };
 
@@ -31,13 +32,18 @@ const App = () => {
 
           {/* Protected Routes */}
           <Route
-            path="/dashboard/*"
+            path="/dashboard"
             element={
               <ProtectedRoute>
-                <Dashboard />
+                <DashboardLayout />
               </ProtectedRoute>
             }
-          />
+          >
+            <Route index element={<Dashboard />} />
+            <Route path="profile" element={<Profile />} />
+            <Route path="tasks" element={<Tasks />} />
+            <Route path="admin" element={<Admin />} />
+          </Route>
 
           {/* Redirect unknown routes to login */}
           <Route path="*" element={<Navigate to="/login" replace />} />
